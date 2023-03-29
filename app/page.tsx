@@ -1,9 +1,10 @@
-
-
 export default function Home() {
   return (
-    <main >
-      
-    </main>
-  )
+    <>
+      <main>
+        <article />
+        <section />
+      </main>
+    </>
+  );
 }
