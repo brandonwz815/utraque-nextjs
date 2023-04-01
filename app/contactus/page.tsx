@@ -15,13 +15,13 @@ const InquerySchema = yup.object().shape({
     .min(2, 'Last name is too short')
     .max(70, 'Last name is too long')
     .required('Last name is required'),
-  company: yup.string().required(),
-  country: yup.string().required(),
+  company: yup.string().required('Company name is required'),
+  country: yup.string().required('Country name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
   phoneNumber: yup
     .string()
     .required('Phone number is required')
-    .verifiedAllDigits(),
+    .verifiedAllDigits('Phone number should be all digits'),
   message: yup.string().notRequired(),
 });
 

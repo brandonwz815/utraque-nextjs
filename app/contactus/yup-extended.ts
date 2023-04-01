@@ -1,12 +1,20 @@
 // yup-extended.ts
 import * as yup from 'yup';
-import { AnyObject, Flags, Maybe } from 'yup';
+import { AnyObject, Flags, Maybe, Message } from 'yup';
 
-yup.addMethod<yup.StringSchema>(yup.string, 'verifiedAllDigits', function () {
-  return this.transform((value) => (value ? value : '')).test((value) =>
-    /^\d+$/.test(value!)
-  );
-});
+yup.addMethod<yup.StringSchema>(
+  yup.string,
+  'verifiedAllDigits',
+  function (message?: Message<any>) {
+    return this.transform((value) => (value ? value : '')).test({
+      name: 'ensureAllDigits',
+      message,
+      test(value: Maybe<string>) {
+        return /^\d+$/.test(value!);
+      },
+    });
+  }
+);
 
 declare module 'yup' {
   interface StringSchema<
@@ -15,7 +23,7 @@ declare module 'yup' {
     TDefault = undefined,
     TFlags extends Flags = ''
   > extends yup.Schema<TType, TContext, TDefault, TFlags> {
-    verifiedAllDigits(): StringSchema<TType, TContext>;
+    verifiedAllDigits(message:string): StringSchema<TType, TContext>;
   }
 }
 
