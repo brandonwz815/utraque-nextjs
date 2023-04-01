@@ -7,7 +7,7 @@ yup.addMethod<yup.StringSchema>(
   'verifiedAllDigits',
   function (message?: Message<any>) {
     return this.transform((value) => (value ? value : '')).test({
-      name: 'ensureAllDigits',
+      name: 'isAllDigits',
       message,
       test(value: Maybe<string>) {
         return /^\d+$/.test(value!);

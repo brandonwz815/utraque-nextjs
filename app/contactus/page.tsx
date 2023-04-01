@@ -1,8 +1,10 @@
 'use client';
 
-import React from 'react';
 import { Formik, Field, Form, ErrorMessage, FormikHelpers } from 'formik';
+import { InferType } from 'yup';
 import yup from './yup-extended';
+import './styles.css';
+import './styles-custom.css';
 
 const InquerySchema = yup.object().shape({
   firstName: yup
@@ -15,8 +17,8 @@ const InquerySchema = yup.object().shape({
     .min(2, 'Last name is too short')
     .max(70, 'Last name is too long')
     .required('Last name is required'),
-  company: yup.string().required('Company name is required'),
-  country: yup.string().required('Country name is required'),
+  company: yup.string().optional(),
+  country: yup.string().required('Company name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
   phoneNumber: yup
     .string()
@@ -25,7 +27,7 @@ const InquerySchema = yup.object().shape({
   message: yup.string().notRequired(),
 });
 
-interface Values {
+/* interface Values {
   firstName: string;
   lastName: string;
   company: string;
@@ -33,27 +35,30 @@ interface Values {
   email: string;
   phoneNumber: number;
   message?: string;
-}
+} */
+
+type Values = InferType<typeof InquerySchema>;
 
 const initialValues: Values = {
   firstName: '',
   lastName: '',
-  company: '',
+  /* company: '', */
   country: '',
   email: '',
-  phoneNumber: 0,
+  phoneNumber: '',
   /* message: '', */
 };
 
-export default function Inquery() {
+export default function Inquery(): JSX.Element {
   return (
     <div>
       <h1>Contact Us</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={InquerySchema}
-        onSubmit={async (values) => {
+        onSubmit={async (values, { setSubmitting }) => {
           await new Promise((r) => setTimeout(r, 500));
+          setSubmitting(false);
           alert(JSON.stringify(values, null, 2));
         }}
       >
@@ -80,7 +85,7 @@ export default function Inquery() {
               <Field
                 id='company'
                 name='company'
-                placeholder='U.S.A'
+                placeholder='Acme'
               />
               <ErrorMessage name='company' />
 
@@ -88,7 +93,7 @@ export default function Inquery() {
               <Field
                 id='country'
                 name='country'
-                placeholder='Acme'
+                placeholder='USA'
               />
               <ErrorMessage name='country' />
 
@@ -108,6 +113,15 @@ export default function Inquery() {
                 placeholder='1112223333'
               />
               <ErrorMessage name='phoneNumber' />
+
+              <label htmlFor='inqueryMessage'>Message</label>
+              <Field
+                as='textarea'
+                id='inqueryMessage'
+                name='message'
+                placeholder='How may Utraque help you?'
+              />
+              <ErrorMessage name='message' />
 
               <button type='submit'>Submit</button>
             </div>
