@@ -1,0 +1,1 @@
+https://github.com/jquense/yup/issues/312
