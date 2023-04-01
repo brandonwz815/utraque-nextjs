@@ -57,12 +57,17 @@ export default function Inquery(): JSX.Element {
         initialValues={initialValues}
         validationSchema={InquerySchema}
         onSubmit={async (values, { setSubmitting }) => {
-          await new Promise((r) => setTimeout(r, 500));
+          // await new Promise((r) => setTimeout(r, 500));
+          console.log('ready for API call');
+          await fetch('api/utraque', {
+            method: 'POST',
+            body: JSON.stringify(values),
+          });
           setSubmitting(false);
           alert(JSON.stringify(values, null, 2));
         }}
       >
-        {({ values }) => (
+        {({ values,   }) => (
           <Form>
             <div className=''>
               <label htmlFor='firstName'>First Name</label>
@@ -81,7 +86,7 @@ export default function Inquery(): JSX.Element {
               />
               <ErrorMessage name='lastName' />
 
-              <label htmlFor='company'>Company</label>
+              <label htmlFor='company'>Company (optional)</label>
               <Field
                 id='company'
                 name='company'
@@ -114,7 +119,7 @@ export default function Inquery(): JSX.Element {
               />
               <ErrorMessage name='phoneNumber' />
 
-              <label htmlFor='inqueryMessage'>Message</label>
+              <label htmlFor='inqueryMessage'>Message (optional)</label>
               <Field
                 as='textarea'
                 id='inqueryMessage'
@@ -123,7 +128,12 @@ export default function Inquery(): JSX.Element {
               />
               <ErrorMessage name='message' />
 
-              <button type='submit'>Submit</button>
+              <button
+                type='submit'
+                /* disabled={isSubmitting} */
+              >
+                Submit
+              </button>
             </div>
           </Form>
         )}
