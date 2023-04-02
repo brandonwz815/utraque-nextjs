@@ -13,14 +13,7 @@ export const transporter = nodemailer.createTransport({
   },
 });
 
-export const inqueryDefaultMailOptions: Mail.Options = {
-  // to: 'brandonwz507@gmail.com',
-  from: 'help@utraque.com',
-  subject: 'Thank you for your inquery to Utraque',
-  // text: 'Hello world!',
-};
-
-export default  async function sendEmail(
+export default async function sendEmail(
   allMailOptions: Mail.Options,
   handleError: (err: Error) => void,
   handleSuccess: (info: SMTPTransport.SentMessageInfo) => void

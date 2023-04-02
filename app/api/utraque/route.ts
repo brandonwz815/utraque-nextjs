@@ -17,16 +17,18 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const data: InqueryValues = await request.json();
-  console.log(data);
 
   await dispatchEmail(data);
   return new Response(JSON.stringify({ hello: 'world' }));
 }
 
 async function dispatchEmail(data: InqueryValues): Promise<void> {
-  const template = ejs.compile(fs.readFileSync('templates/inqueryReplyEmail.html', 'utf8'));
-  const renderedTemplate = template({ to: data.email });
-  // console.log(renderedTemplate);
+  const template = ejs.compile(
+    fs.readFileSync('templates/inqueryReplyEmail.html', 'utf8')
+  );
+  console.log(data);
+  const renderedTemplate = template(data);
+  // console.log(renderedTemplate)
 
   await sendEmail(
     {
@@ -37,11 +39,9 @@ async function dispatchEmail(data: InqueryValues): Promise<void> {
     },
     (error: Error) => {
       console.error(error);
-      // return new Response('BAD REQUEST');
     },
     (info: SMTPTransport.SentMessageInfo) => {
       console.log('Email sent: ' + info.response);
-      // return new Response('OK');
     }
   );
 }
