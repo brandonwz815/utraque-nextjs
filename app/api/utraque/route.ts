@@ -1,8 +1,8 @@
-import { Values } from '@/app/contactus/page';
-import { inqueryDefaultMailOptions, sendEmail } from '@/app/lib/email';
 import ejs from 'ejs';
 import fs from 'fs';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { Values } from '@/app/contactus/page';
+import sendEmail from '@/app/lib/email';
 
 const CONTACT_MESSAGE_FIELDS: Record<string, string> = {
   name: 'Name',
@@ -16,17 +16,25 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  // const data: Request = await request.json();
   const data: Values = await request.json();
-  console.log('typeof data: ', typeof data);
   console.log(data);
 
-  const template = ejs.compile(fs.readFileSync('templates/email.html', 'utf8'));
+  await dispatchEmail(data);
+  return new Response(JSON.stringify({ hello: 'world' }));
+}
+
+async function dispatchEmail(data: Values): Promise<void> {
+  const template = ejs.compile(fs.readFileSync('templates/inqueryReplyEmail.html', 'utf8'));
   const renderedTemplate = template({ to: data.email });
-  console.log(renderedTemplate);
+  // console.log(renderedTemplate);
 
   await sendEmail(
-    { ...inqueryDefaultMailOptions, to: data.email, html: renderedTemplate },
+    {
+      from: 'help@utraque.com',
+      to: data.email,
+      subject: 'Thank you for your inquery to Utraque',
+      html: renderedTemplate,
+    },
     (error: Error) => {
       console.error(error);
       return new Response('BAD REQUEST');
@@ -36,6 +44,4 @@ export async function POST(request: Request) {
       return new Response('OK');
     }
   );
-
-  return new Response(JSON.stringify({ hello: 'world' }));
 }

@@ -20,7 +20,7 @@ export const inqueryDefaultMailOptions: Mail.Options = {
   // text: 'Hello world!',
 };
 
-export  async function sendEmail(
+export default  async function sendEmail(
   allMailOptions: Mail.Options,
   handleError: (err: Error) => void,
   handleSuccess: (info: SMTPTransport.SentMessageInfo) => void
