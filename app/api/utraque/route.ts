@@ -1,7 +1,8 @@
 import { Values } from '@/app/contactus/page';
-import { mailOptions, transporter } from '@/app/lib/email';
+import { inqueryDefaultMailOptions, sendEmail } from '@/app/lib/email';
 import ejs from 'ejs';
 import fs from 'fs';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 const CONTACT_MESSAGE_FIELDS: Record<string, string> = {
   name: 'Name',
@@ -24,21 +25,15 @@ export async function POST(request: Request) {
   const renderedTemplate = template({ to: data.email });
   console.log(renderedTemplate);
 
-  await transporter.sendMail(
-    {
-      ...mailOptions,
-      to: data.email,
-      // text: '',
-      html: renderedTemplate,
+  await sendEmail(
+    { ...inqueryDefaultMailOptions, to: data.email, html: renderedTemplate },
+    (error: Error) => {
+      console.error(error);
+      return new Response('BAD REQUEST');
     },
-    (error, info) => {
-      if (error) {
-        console.error(error);
-        return new Response('BAD REQUEST');
-      } else {
-        console.log('Email sent: ' + info.response);
-        return new Response('OK');
-      }
+    (info: SMTPTransport.SentMessageInfo) => {
+      console.log('Email sent: ' + info.response);
+      return new Response('OK');
     }
   );
 
