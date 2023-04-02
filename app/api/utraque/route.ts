@@ -1,3 +1,4 @@
+import { Values } from '@/app/contactus/page';
 import { mailOptions, transporter } from '@/app/lib/email';
 import ejs from 'ejs';
 import fs from 'fs';
@@ -15,7 +16,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   // const data: Request = await request.json();
-  const data = await request.json();
+  const data: Values = await request.json();
   console.log('typeof data: ', typeof data);
   console.log(data);
 

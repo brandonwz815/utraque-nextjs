@@ -13,6 +13,7 @@ export const transporter = nodemailer.createTransport({
 });
 
 export const mailOptions: Mail.Options = {
+  to: 'brandonwz507@gmail.com',
   from: 'help@utraque.com',
   subject: 'Thank you for your inquery to Utraque',
   // text: 'Hello world!',
