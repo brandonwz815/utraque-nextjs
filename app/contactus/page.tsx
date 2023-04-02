@@ -27,16 +27,6 @@ const InquerySchema = yup.object().shape({
   message: yup.string().notRequired(),
 });
 
-/* interface Values {
-  firstName: string;
-  lastName: string;
-  company: string;
-  country: string;
-  email: string;
-  phoneNumber: number;
-  message?: string;
-} */
-
 type Values = InferType<typeof InquerySchema>;
 
 const initialValues: Values = {
@@ -62,12 +52,16 @@ export default function Inquery(): JSX.Element {
           await fetch('api/utraque', {
             method: 'POST',
             body: JSON.stringify(values),
+            headers: {
+              'content-type': 'application/json',
+              Accept: 'application/json',
+            },
           });
           setSubmitting(false);
           alert(JSON.stringify(values, null, 2));
         }}
       >
-        {({ values,   }) => (
+        {({ values }) => (
           <Form>
             <div className=''>
               <label htmlFor='firstName'>First Name</label>

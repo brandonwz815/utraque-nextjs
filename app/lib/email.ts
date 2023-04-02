@@ -1,18 +1,21 @@
 import * as nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
-const transporter = nodemailer.createTransport({
+const email = process.env.EMAIL;
+const pass = process.env.EMAIL_PASS;
+
+export const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'your-email@gmail.com',
-    pass: 'your-email-password',
+    user: email,
+    pass,
   },
 });
 
-const mailOptions: Mail.Options = {
+export const mailOptions: Mail.Options = {
   from: 'your-email@gmail.com',
-  to: 'recipient@example.com',
-  subject: 'Test email from nodemailer',
+  to: 'brandonwz815@gmail.com',
+  subject: 'Test email from nodemailer for Utraque',
   text: 'Hello world!',
 };
 
