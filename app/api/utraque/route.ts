@@ -9,44 +9,26 @@ const CONTACT_MESSAGE_FIELDS: Record<string, string> = {
   message: 'Message',
 };
 
-const generateEmailContent = (data: Request) => {
-  const stringData = Object.entries(data).reduce(
-    (str, [key, val]) =>
-      (str += `${CONTACT_MESSAGE_FIELDS[key]}: \n${val}\n\n`),
-    ''
-  );
-
-  /* const htmlData = Object.entries(data).reduce(
-    (str, [key, val]) =>
-      (str += `<h1 class='form-heading' align='left'>${CONTACT_MESSAGE_FIELDS[key]}</h1><p class='form-answer' align='left'>${val}<p>`),
-    ''
-  ); */
-
-  return {
-    text: stringData,
-    html: '',
-  };
-};
-
-const template = ejs.compile(fs.readFileSync('/templates/email.html', 'utf8'));
-const renderedTemplate = template(generateEmailContent);
-console.log(renderedTemplate);
-
 export async function GET(request: Request) {
   return new Response('Hello, Next.js!');
 }
 
 export async function POST(request: Request) {
-  const data: Request = await request.json();
+  // const data: Request = await request.json();
+  const data = await request.json();
+  console.log('typeof data: ', typeof data);
   console.log(data);
+
+  const template = ejs.compile(fs.readFileSync('templates/email.html', 'utf8'));
+  const renderedTemplate = template({ to: data.email });
+  console.log(renderedTemplate);
 
   await transporter.sendMail(
     {
       ...mailOptions,
-      ...generateEmailContent(data),
-      subject: '',
-      /* text: '',
-      html: '', */
+      to: data.email,
+      // text: '',
+      html: renderedTemplate,
     },
     (error, info) => {
       if (error) {

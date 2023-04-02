@@ -13,10 +13,9 @@ export const transporter = nodemailer.createTransport({
 });
 
 export const mailOptions: Mail.Options = {
-  from: 'your-email@gmail.com',
-  to: 'brandonwz815@gmail.com',
-  subject: 'Test email from nodemailer for Utraque',
-  text: 'Hello world!',
+  from: 'help@utraque.com',
+  subject: 'Thank you for your inquery to Utraque',
+  // text: 'Hello world!',
 };
 
 transporter.sendMail(mailOptions, (error, info) => {

@@ -24,10 +24,11 @@ const InquerySchema = yup.object().shape({
     .string()
     .required('Phone number is required')
     .verifiedAllDigits('Phone number should be all digits'),
-  message: yup.string().notRequired(),
+  message: yup.string().optional(),
+  // message: yup.string().notRequired(),
 });
 
-type Values = InferType<typeof InquerySchema>;
+export type Values = InferType<typeof InquerySchema>;
 
 const initialValues: Values = {
   firstName: '',
@@ -58,7 +59,7 @@ export default function Inquery(): JSX.Element {
             },
           });
           setSubmitting(false);
-          alert(JSON.stringify(values, null, 2));
+          // alert(JSON.stringify(values, null, 2));
         }}
       >
         {({ values }) => (
