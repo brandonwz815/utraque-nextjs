@@ -1,8 +1,8 @@
 import ejs from 'ejs';
 import fs from 'fs';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import { Values } from '@/app/contactus/page';
 import sendEmail from '@/app/lib/email';
+import { InqueryValues } from '@/app/model/inqueryModel';
 
 const CONTACT_MESSAGE_FIELDS: Record<string, string> = {
   name: 'Name',
@@ -16,14 +16,14 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const data: Values = await request.json();
+  const data: InqueryValues = await request.json();
   console.log(data);
 
   await dispatchEmail(data);
   return new Response(JSON.stringify({ hello: 'world' }));
 }
 
-async function dispatchEmail(data: Values): Promise<void> {
+async function dispatchEmail(data: InqueryValues): Promise<void> {
   const template = ejs.compile(fs.readFileSync('templates/inqueryReplyEmail.html', 'utf8'));
   const renderedTemplate = template({ to: data.email });
   // console.log(renderedTemplate);
@@ -37,11 +37,11 @@ async function dispatchEmail(data: Values): Promise<void> {
     },
     (error: Error) => {
       console.error(error);
-      return new Response('BAD REQUEST');
+      // return new Response('BAD REQUEST');
     },
     (info: SMTPTransport.SentMessageInfo) => {
       console.log('Email sent: ' + info.response);
-      return new Response('OK');
+      // return new Response('OK');
     }
   );
 }
