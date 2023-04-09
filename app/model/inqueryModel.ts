@@ -1,5 +1,5 @@
 import { InferType } from 'yup';
-import yup from '../contactus/yup-extended';
+import yup from '../inquery/yup-extended';
 
 export const InquerySchema = yup.object().shape({
   firstName: yup
